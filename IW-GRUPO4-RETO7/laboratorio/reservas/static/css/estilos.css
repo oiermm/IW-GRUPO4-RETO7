@@ -47,6 +47,13 @@
     background-color: #004080;
 }
 
+.logo-deusto {
+    width: 80px;          /* tamaño del logo */
+    position: absolute;
+    top: 15px;
+    right: 20px;
+}
+
 /* ------------------ CONTENIDO ------------------ */
 
 .contenido-principal {
