@@ -1,0 +1,19 @@
+{% extends "reservas/base.html" %}
+
+{% block content %}
+<section id="indice" class="indice">
+
+    <section class="opciones">
+        <a href="{% url 'lista_usuarios' %}">Usuarios</a>
+    </section>
+
+    <section class="opciones">
+        <a href="{% url 'lista_recursos' %}">Recursos</a>
+    </section>
+
+    <section class="opciones">
+        <a href="{% url 'lista_reservas' %}">Reservas</a>
+    </section>
+
+</section>
+{% endblock %}
