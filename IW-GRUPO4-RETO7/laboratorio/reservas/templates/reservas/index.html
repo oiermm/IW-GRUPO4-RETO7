@@ -1,19 +1,68 @@
 {% extends "reservas/base.html" %}
+{% load static %}
 
 {% block content %}
-<section id="indice" class="indice">
 
-    <section class="opciones">
-        <a href="{% url 'lista_usuarios' %}">Usuarios</a>
-    </section>
+<section class="seccion-contenido seccion-flex">
+    
+    <div class="texto-seccion">
+        <h2 class="titulo-seccion">Sobre nosotros</h2>
 
-    <section class="opciones">
-        <a href="{% url 'lista_recursos' %}">Recursos</a>
-    </section>
+        <p>
+            El <strong>Laboratorio de la Universidad de Deusto</strong> es un espacio diseñado para el aprendizaje,
+            la experimentación y el desarrollo de proyectos tecnológicos. Nuestro objetivo es ofrecer un entorno
+            seguro, organizado y accesible para todos los estudiantes y personal docente.
+        </p>
 
-    <section class="opciones">
-        <a href="{% url 'lista_reservas' %}">Reservas</a>
-    </section>
+        <p>
+            Este sistema de reservas ha sido creado para mejorar la gestión del laboratorio, permitiendo un control
+            eficiente de usuarios, recursos y reservas. Gracias a esta plataforma, garantizamos un uso responsable
+            y ordenado del material disponible.
+        </p>
+    </div>
 
+    <img src="{% static 'img/laboratorio.jpg' %}" class="img-seccion" alt="Laboratorio">
 </section>
+
+
+
+<section class="seccion-contenido seccion-flex">
+
+    <div class="texto-seccion">
+        <h2 class="titulo-seccion">Normas del laboratorio</h2>
+
+        <ul class="lista1">
+            <li>Respeta el material y devuélvelo en las mismas condiciones en las que lo recibiste.</li>
+            <li>Realiza siempre una reserva antes de utilizar cualquier recurso.</li>
+            <li>Respeta los horarios establecidos y no excedas el tiempo asignado.</li>
+            <li>Informa de cualquier incidencia o daño detectado en los equipos.</li>
+            <li>Mantén el espacio limpio y ordenado tras su uso.</li>
+        </ul>
+    </div>
+
+    <img src="{% static 'img/normas.jpg' %}" class="img-seccion" alt="Normas del laboratorio">
+</section>
+
+
+
+<section class="seccion-contenido seccion-flex">
+
+    <div class="texto-seccion">
+        <h2 class="titulo-seccion">Objetivos del sistema</h2>
+
+        <p>El Sistema de Reservas del Laboratorio busca:</p>
+
+        <ul class="lista1">
+            <li>Optimizar la disponibilidad de recursos.</li>
+            <li>Evitar conflictos de horarios entre usuarios.</li>
+            <li>Garantizar un uso responsable del material.</li>
+            <li>Facilitar la organización del trabajo académico.</li>
+            <li>Ofrecer una experiencia clara, rápida y accesible.</li>
+        </ul>
+    </div>
+
+    <img src="{% static 'img/objetivos.jpg' %}" class="img-seccion" alt="Objetivos del sistema">
+</section>
+
 {% endblock %}
+    
