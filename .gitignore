@@ -1,0 +1,15 @@
+# Entorno virtual (sustituye 'env' por el nombre de tu carpeta si es distinto)
+env/
+venv/
+.venv/
+
+# Python
+**/__pycache__/
+*.pyc
+
+# Base de datos local
+*.sqlite3
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
