@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Usuarios</title>
+</head>
+<body>
+
+    <h1>Usuarios</h1>
+
+    <a href="{% url 'crear_usuario' %}">➕ Crear usuario</a>
+
+    <hr>
+
+    {% if usuarios %}
+        <ul>
+            {% for u in usuarios %}
+                <li>
+                    <strong>{{ u.nombre }} {{ u.apellidos }}</strong><br>
+                    DNI: {{ u.dni }}<br>
+                    Email: {{ u.email }}<br>
+                    Teléfono: {{ u.telefono }}
+                </li>
+                <hr>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No hay usuarios registrados.</p>
+    {% endif %}
+
+</body>
+</html>
