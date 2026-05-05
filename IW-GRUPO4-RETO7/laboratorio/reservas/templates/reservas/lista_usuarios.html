@@ -1,32 +1,29 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Lista de Usuarios</title>
-</head>
-<body>
+{% extends 'reservas/base.html' %}
 
-    <h1>Usuarios</h1>
+{% block title %}Lista de Usuarios{% endblock %}
 
-    <a href="{% url 'crear_usuario' %}">➕ Crear usuario</a>
+{% block content %}
 
-    <hr>
+<h1>Usuarios</h1>
 
-    {% if usuarios %}
-        <ul>
-            {% for u in usuarios %}
-                <li>
-                    <strong>{{ u.nombre }} {{ u.apellidos }}</strong><br>
-                    DNI: {{ u.dni }}<br>
-                    Email: {{ u.email }}<br>
-                    Teléfono: {{ u.telefono }}
-                </li>
-                <hr>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No hay usuarios registrados.</p>
-    {% endif %}
+<a href="{% url 'crear_usuario' %}" class="botones">➕ Crear usuario</a>
 
-</body>
-</html>
+<hr>
+
+{% if usuarios %}
+    <ul>
+        {% for u in usuarios %}
+            <li>
+                <strong>{{ u.nombre }} {{ u.apellidos }}</strong><br>
+                DNI: {{ u.dni }}<br>
+                Email: {{ u.email }}<br>
+                Teléfono: {{ u.telefono }}
+            </li>
+            <hr>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No hay usuarios registrados.</p>
+{% endif %}
+
+{% endblock %}

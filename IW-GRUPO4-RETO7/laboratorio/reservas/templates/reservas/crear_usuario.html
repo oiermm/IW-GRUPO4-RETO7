@@ -1,24 +1,19 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Crear Usuario</title>
-</head>
-<body>
+{% extends 'reservas/base.html' %}
 
-    <h1>Crear usuario</h1>
+{% block title %}Crear Usuario{% endblock %}
 
-    <a href="{% url 'lista_usuarios' %}">⬅ Volver a la lista</a>
+{% block content %}
 
-    <hr>
+<h1>Crear usuario</h1>
 
-    <form method="post">
-        {% csrf_token %}
+<a href="{% url 'lista_usuarios' %}" class="botones">⬅ Volver a la lista</a>
 
-        {{ form.as_p }}
+<hr>
 
-        <button type="submit">Guardar</button>
-    </form>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="boton-enviar">Guardar</button>
+</form>
 
-</body>
-</html>
+{% endblock %}
