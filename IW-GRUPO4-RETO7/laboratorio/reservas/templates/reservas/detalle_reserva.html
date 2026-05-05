@@ -1,0 +1,22 @@
+{% extends 'reservas/base.html' %}
+
+{% block title %}Detalle Reserva{% endblock %}
+
+{% block content %}
+
+<h1>Detalle de Reserva</h1>
+
+<p><strong>Código:</strong> {{ reserva.codigo_reserva }}</p>
+<p><strong>Fecha:</strong> {{ reserva.fecha }}</p>
+<p><strong>Hora:</strong> {{ reserva.hora_inicio }} - {{ reserva.hora_fin }}</p>
+<p><strong>Estado:</strong> {{ reserva.estado }}</p>
+<p><strong>Finalidad:</strong> {{ reserva.finalidad }}</p>
+
+<p><strong>Usuario:</strong> {{ reserva.usuario.nombre }} {{ reserva.usuario.apellidos }}</p>
+<p><strong>Recurso:</strong> {{ reserva.recurso.nombre }}</p>
+
+<br>
+
+<a href="{% url 'lista_reservas' %}">⬅ Volver</a>
+
+{% endblock %}

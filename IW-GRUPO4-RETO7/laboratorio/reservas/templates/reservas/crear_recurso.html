@@ -1,0 +1,19 @@
+{% extends 'reservas/base.html' %}
+
+{% block title %}Crear Recurso{% endblock %}
+
+{% block content %}
+
+<h1>Crear recurso</h1>
+
+<a href="{% url 'lista_recursos' %}" class="botones">⬅ Volver</a>
+
+<hr>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="boton-enviar">Guardar</button>
+</form>
+
+{% endblock %}

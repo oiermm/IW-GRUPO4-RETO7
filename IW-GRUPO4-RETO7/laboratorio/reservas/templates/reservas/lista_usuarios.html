@@ -10,20 +10,20 @@
 
 <hr>
 
-{% if usuarios %}
-    <ul>
-        {% for u in usuarios %}
-            <li>
-                <strong>{{ u.nombre }} {{ u.apellidos }}</strong><br>
-                DNI: {{ u.dni }}<br>
-                Email: {{ u.email }}<br>
-                Teléfono: {{ u.telefono }}
-            </li>
-            <hr>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No hay usuarios registrados.</p>
-{% endif %}
+{% for u in usuarios %}
+    <li>
+        <strong>{{ u.nombre }} {{ u.apellidos }}</strong><br>
+        DNI: {{ u.dni }}<br>
+        Email: {{ u.email }}<br>
+        Teléfono: {{ u.telefono }}
+
+        <br><br>
+
+        <a href="{% url 'editar_usuario' u.id %}">✏️ Editar</a> 
+        <a href="{% url 'eliminar_usuario' u.id %}">🗑️ Eliminar</a>
+
+    </li>
+    <hr>
+{% endfor %}
 
 {% endblock %}

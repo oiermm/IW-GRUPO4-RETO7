@@ -1,0 +1,37 @@
+{% extends 'reservas/base.html' %}
+
+{% block title %}Lista de Recursos{% endblock %}
+
+{% block content %}
+
+<h1>Recursos</h1>
+
+<a href="{% url 'crear_recurso' %}" class="botones">➕ Crear recurso</a>
+
+<hr>
+
+{% if recursos %}
+    <ul>
+        {% for r in recursos %}
+            <li>
+                <strong>{{ r.nombre }}</strong><br>
+                Código: {{ r.codigo }}<br>
+                Tipo: {{ r.tipo }}<br>
+                Ubicación: {{ r.ubicacion }}<br>
+                Estado: {{ r.estado }}<br>
+                Responsable: {{ r.responsable_tecnico }}
+
+                <br><br>
+
+                <a href="{% url 'editar_recurso' r.id %}">✏️ Editar</a> |
+                <a href="{% url 'eliminar_recurso' r.id %}">🗑️ Eliminar</a>
+
+            </li>
+            <hr>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No hay recursos registrados.</p>
+{% endif %}
+
+{% endblock %}

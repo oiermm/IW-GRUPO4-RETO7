@@ -1,0 +1,45 @@
+{% extends 'reservas/base.html' %}
+
+{% block title %}Lista de Reservas{% endblock %}
+
+{% block content %}
+
+<h1>Reservas</h1>
+
+<a href="{% url 'crear_reserva' %}" class="botones">➕ Crear reserva</a>
+
+
+<hr>
+
+{% if reservas %}
+
+    <ul>
+        {% for r in reservas %}
+            <li>
+                <strong>{{ r.codigo_reserva }}</strong><br>
+
+                📅 Fecha: {{ r.fecha }}<br>
+                🕒 {{ r.hora_inicio }} - {{ r.hora_fin }}<br>
+                📌 Estado: {{ r.estado }}<br>
+                📝 Finalidad: {{ r.finalidad }}<br>
+                👤 Usuario: {{ r.usuario.nombre }} {{ r.usuario.apellidos }}<br>
+                🧪 Recurso: {{ r.recurso.nombre }}
+
+                <br><br>
+
+                <a href="{% url 'detalle_reserva' r.id %}">Ver detalle</a> 
+                <a href="{% url 'editar_reserva' r.id %}"> ✏️ Editar</a> 
+                <a href="{% url 'eliminar_reserva' r.id %}">🗑️ Eliminar</a>
+                
+            </li>
+            <hr>
+        {% endfor %}
+    </ul>
+
+{% else %}
+
+    <p>No hay reservas registradas.</p>
+
+{% endif %}
+
+{% endblock %}

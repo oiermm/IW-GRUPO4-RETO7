@@ -1,0 +1,20 @@
+{% extends 'reservas/base.html' %}
+
+{% block title %}Cancelar Reserva{% endblock %}
+
+{% block content %}
+
+<h1>Cancelar reserva</h1>
+
+<p>
+    ¿Seguro que quieres cancelar la reserva
+    <strong>{{ reserva.codigo_reserva }}</strong>?
+</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Sí, eliminar</button>
+    <a href="{% url 'lista_reservas' %}">Volver</a>
+</form>
+
+{% endblock %}
