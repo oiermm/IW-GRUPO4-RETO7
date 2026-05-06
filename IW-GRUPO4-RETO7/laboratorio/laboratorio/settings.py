@@ -20,7 +20,7 @@ import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-CSRF_TRUSTED_ORIGINS = ['https://bunny-shriek-unplug.ngrok-free.dev']
+CSRF_TRUSTED_ORIGINS = ['https://bunny-shriek-unplug.ngrok-free.dev', 'https://dwindling-petunia-retriever.ngrok-free.dev']
 
 
 # Quick-start development settings - unsuitable for production

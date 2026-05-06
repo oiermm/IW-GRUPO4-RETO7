@@ -1,10 +1,13 @@
-/* ------------------ ESTILO GENERAL ------------------ */
+/* ------------------ GRID GENERAL DE LA PÁGINA ------------------ */
 
-.cuerpo-principal {
-    font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
+body {
+    display: grid;
+    grid-template-rows: auto 1fr auto; /* header - contenido - footer */
+    min-height: 100vh;
     margin: 0;
     padding: 0;
+    background-color: #f2f2f2;
+    font-family: Arial, sans-serif;
 }
 
 /* ------------------ HEADER ------------------ */
@@ -14,6 +17,7 @@
     padding: 15px 20px;
     color: white;
     text-align: center;
+    position: relative;
 }
 
 .titulo-header {
@@ -48,7 +52,7 @@
 }
 
 .logo-deusto {
-    width: 150px;          /* tamaño del logo */
+    width: 150px;
     position: absolute;
     top: 15px;
     right: 20px;
@@ -153,20 +157,6 @@
     color: #333;
 }
 
-/* RESPONSIVE */
-
-@media (max-width: 600px) {
-    .fila-input {
-        flex-direction: column;
-        width: 100%;
-    }
-
-    .botones {
-        width: 90%;
-        text-align: center;
-    }
-}
-
 /* ------------------ INDEX ------------------ */
 
 .seccion-contenido {
@@ -223,14 +213,76 @@
     object-fit: cover;
 }
 
-/* Responsive para móvil */
-@media (max-width: 800px) {
-    .seccion-flex {
-        flex-direction: column;
-        text-align: center;
+/* ------------------ BREAKPOINTS ------------------ */
+
+/* PANTALLAS GRANDES */
+@media (max-width: 1200px) {
+    .contenido-principal,
+    .seccion-contenido {
+        max-width: 800px;
+    }
+}
+
+/* TABLET */
+@media (max-width: 900px) {
+    .navegacion {
+        gap: 20px;
     }
 
     .img-seccion {
-        width: 90%;
+        width: 70%;
+    }
+}
+
+/* MOVIL */
+@media (max-width: 600px) {
+
+    /* HEADER */
+    .header {
+        padding: 20px 10px;
+        text-align: center;
+    }
+
+    .logo-deusto {
+        width: 90px;
+        position: static;
+        margin: 10px auto;
+        display: block;
+    }
+
+    .navegacion {
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 15px;
+    }
+
+    .botones {
+        width: 100%;
+        padding: 12px;
+        font-size: 17px;
+        text-align: center;
+    }
+
+    /* CONTENIDO */
+    .contenido-principal {
+        padding: 20px 15px;
+        margin: 30px 10px;
+        border-radius: 10px;
+    }
+
+    /* FOOTER */
+    .pie {
+        padding: 20px 10px;
+    }
+
+    .fila-input,
+    .campo-descripcion {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .contacto-info {
+        flex-direction: column;
+        gap: 10px;
     }
 }
