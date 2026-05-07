@@ -59,11 +59,10 @@ class Reserva(models.Model):
         related_name='reservas'
     )
 
-    recurso = models.ForeignKey(
-        Recurso,
-        on_delete=models.CASCADE,
-        related_name='reservas'
-    )
+    recursos = models.ManyToManyField(
+    Recurso,
+    related_name='reservas'
+)
 
     def __str__(self):
         return f"Reserva {self.codigo_reserva} - {self.recurso.nombre}"

@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Usuario, Recurso, Reserva
 from .forms import UsuarioForm, RecursoForm, ReservaForm
 
+
+
+
 # ---------- LISTADOS ----------
 def lista_usuarios(request):
     usuarios = Usuario.objects.all()
@@ -37,14 +40,14 @@ def crear_recurso(request):
         form = RecursoForm()
     return render(request, 'reservas/crear_recurso.html', {'form': form})
 
-def crear_reserva(request):
-    if request.method == 'POST':
-        form = ReservaForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('lista_reservas')
-    else:
-        form = ReservaForm()
+def crear_reserva(request): 
+    if request.method == 'POST': 
+       form = ReservaForm(request.POST) 
+       if form.is_valid(): 
+        form.save() 
+        return redirect('lista_reservas') 
+    else: 
+        form = ReservaForm() 
     return render(request, 'reservas/crear_reserva.html', {'form': form})
 
 def index(request):
