@@ -40,19 +40,19 @@ class ReservaForm(forms.ModelForm):
         if not fecha or not hora_inicio or not hora_fin or not recursos:
             return cleaned_data
 
-        # Validación básica
+        
         if hora_inicio >= hora_fin:
             raise ValidationError(
                 "La hora de inicio debe ser anterior a la de fin."
             )
 
-        # Buscar conflictos
+        
         conflictos = Reserva.objects.filter(
             fecha=fecha,
             recursos__in=recursos
         ).exclude(id=self.instance.id).distinct()
 
-        # Comprobar solapamientos
+        
         for r in conflictos:
             if hora_inicio < r.hora_fin and hora_fin > r.hora_inicio:
                 raise ValidationError(
