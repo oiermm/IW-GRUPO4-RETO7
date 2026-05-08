@@ -38,7 +38,6 @@ class Recurso(models.Model):
         return f"{self.nombre} ({self.codigo})"
     
 
-
 class Reserva(models.Model):
     ESTADOS = [
         ('pendiente', 'Pendiente'),
