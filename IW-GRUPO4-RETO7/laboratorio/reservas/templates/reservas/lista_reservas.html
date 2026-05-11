@@ -23,7 +23,9 @@
                 📌 Estado: {{ r.estado }}<br>
                 📝 Finalidad: {{ r.finalidad }}<br>
                 👤 Usuario: {{ r.usuario.nombre }} {{ r.usuario.apellidos }}<br>
-                🧪 Recurso: {{ r.recurso.nombre }}
+                🧪 Recursos: {% for recurso in r.recursos.all %}
+                            {{ recurso.nombre }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
 
                 <br><br>
 
