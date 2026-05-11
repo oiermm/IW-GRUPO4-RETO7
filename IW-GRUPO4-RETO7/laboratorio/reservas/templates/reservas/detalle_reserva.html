@@ -13,7 +13,7 @@
 <p><strong>Finalidad:</strong> {{ reserva.finalidad }}</p>
 
 <p><strong>Usuario:</strong> {{ reserva.usuario.nombre }} {{ reserva.usuario.apellidos }}</p>
-<p><strong>Recurso:</strong> {% for recurso in reserva.recursos.all %}
+ <p><strong>Recurso:</strong> {% for recurso in reserva.recursos.all %}
                              {{ recurso.nombre }}{% if not forloop.last %}, {% endif %}
                              {% endfor %}</p>
 
