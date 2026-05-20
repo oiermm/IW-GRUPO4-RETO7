@@ -6,42 +6,106 @@
 
 <h1>Reservas</h1>
 
-<a href="{% url 'crear_reserva' %}" class="botones">➕ Crear reserva</a>
-
+<a href="/reservas/crear/" class="botones">➕ Crear reserva</a>
 
 <hr>
 
-{% if reservas %}
+<!-- BUSCADOR -->
+<div style="margin-bottom: 1rem;">
+    <input type="text" id="filtro-recurso" placeholder="🔍 Buscar por recurso...">
+    <input type="date" id="filtro-fecha">
+    <button onclick="buscar()">Buscar</button>
+    <button onclick="limpiar()">Limpiar</button>
+</div>
 
-    <ul>
-        {% for r in reservas %}
-            <li>
-                <strong>{{ r.codigo_reserva }}</strong><br>
+<!-- Lista generada por JS -->
+<div id="lista-container">
+    <p>Cargando reservas...</p>
+</div>
 
-                📅 Fecha: {{ r.fecha }}<br>
-                🕒 {{ r.hora_inicio }} - {{ r.hora_fin }}<br>
-                📌 Estado: {{ r.estado }}<br>
-                📝 Finalidad: {{ r.finalidad }}<br>
-                👤 Usuario: {{ r.usuario.nombre }} {{ r.usuario.apellidos }}<br>
-                🧪 Recursos: {% for recurso in r.recursos.all %}
-                            {{ recurso.nombre }}{% if not forloop.last %}, {% endif %}
-                            {% endfor %}
+<!-- Paginación -->
+<div id="paginacion" style="margin-top: 1rem;"></div>
 
-                <br><br>
+<script>
+    async function cargarReservas(page) {
+        page = page || 1;
+        const recurso = document.getElementById('filtro-recurso').value;
+        const fecha = document.getElementById('filtro-fecha').value;
+        const tokenActual = getToken();
 
-                <a href="{% url 'detalle_reserva' r.id %}">Ver detalle</a> 
-                <a href="{% url 'editar_reserva' r.id %}"> ✏️ Editar</a> 
-                <a href="{% url 'eliminar_reserva' r.id %}">🗑️ Eliminar</a>
-                
-            </li>
-            <hr>
-        {% endfor %}
-    </ul>
+        let url = '/api/reservas/?page=' + page;
+        if (recurso) url += '&recurso=' + encodeURIComponent(recurso);
+        if (fecha)   url += '&fecha=' + fecha;
 
-{% else %}
+        try {
+            const response = await fetch(url, {
+                headers: { 'Authorization': 'Bearer ' + tokenActual }
+            });
 
-    <p>No hay reservas registradas.</p>
+            if (response.status === 401) {
+                window.location.href = '/login/';
+                return;
+            }
 
-{% endif %}
+            const data = await response.json();
+            renderLista(data.results);
+            renderPaginacion(data.total_pages, data.current_page, data.total);
+
+        } catch (err) {
+            document.getElementById('lista-container').innerHTML =
+                '<p>Error al cargar las reservas.</p>';
+        }
+    }
+
+    function renderLista(reservas) {
+        const container = document.getElementById('lista-container');
+
+        if (!reservas || reservas.length === 0) {
+            container.innerHTML = '<p>No hay reservas registradas.</p>';
+            return;
+        }
+
+        const items = reservas.map(function(r) {
+            return '<li>' +
+                '<strong>' + r.codigo_reserva + '</strong><br>' +
+                '📅 Fecha: ' + r.fecha + '<br>' +
+                '🕒 ' + r.hora_inicio + ' - ' + r.hora_fin + '<br>' +
+                '📌 Estado: ' + r.estado + '<br>' +
+                '📝 Finalidad: ' + r.finalidad + '<br>' +
+                '👤 Usuario: ' + r.usuario + '<br>' +
+                '🧪 Recursos: ' + r.recursos.join(', ') + '<br><br>' +
+                '<a href="' + urlConToken('/reservas/' + r.id + '/') + '">Ver detalle</a> ' +
+                '<a href="' + urlConToken('/reservas/editar/' + r.id + '/') + '">✏️ Editar</a> ' +
+                '<a href="' + urlConToken('/reservas/' + r.id + '/eliminar/') + '">🗑️ Eliminar</a>' +
+                '</li><hr>';
+        }).join('');
+
+        container.innerHTML = '<ul>' + items + '</ul>';
+    }
+
+    function renderPaginacion(totalPages, current, total) {
+        const div = document.getElementById('paginacion');
+        if (totalPages <= 1) { div.innerHTML = ''; return; }
+
+        let html = '<p>Total: ' + total + ' reservas</p>';
+        for (let i = 1; i <= totalPages; i++) {
+            html += '<button onclick="cargarReservas(' + i + ')" ' +
+                (i === current ? 'style="font-weight:bold;"' : '') + '>' + i + '</button> ';
+        }
+        div.innerHTML = html;
+    }
+
+    function buscar() {
+        cargarReservas(1);
+    }
+
+    function limpiar() {
+        document.getElementById('filtro-recurso').value = '';
+        document.getElementById('filtro-fecha').value = '';
+        cargarReservas(1);
+    }
+
+    cargarReservas();
+</script>
 
 {% endblock %}

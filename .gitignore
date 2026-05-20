@@ -4,8 +4,11 @@ env/
 .env
 
 # Python
-/__pycache__/
+__pycache__/
 *.pyc
 
 # Base de datos
-..sqlite3
+*.sqlite3
+
+# Logs
+*.log

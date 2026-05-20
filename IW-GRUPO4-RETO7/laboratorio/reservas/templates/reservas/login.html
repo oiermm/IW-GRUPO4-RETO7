@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login — Sistema de Reservas</title>
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+</head>
+
+<body class="cuerpo-principal">
+
+    <header class="header">
+        <a href="{% url 'index' %}" class="link-logo">
+            <h1 class="titulo-header">Sistema de Reservas</h1>
+        </a>
+        <img src="{% static 'img/logo-deusto.jpg' %}" alt="Logo Deusto" class="logo-deusto">
+    </header>
+
+    <article class="contenido-principal">
+        <h2>Acceso al sistema</h2>
+
+        <div id="error-msg" style="color:red; display:none; margin-bottom: 1rem;"></div>
+
+        <form id="login-form">
+            {% csrf_token %}
+            <div class="campo-input">
+                <label class="nombre_label">Usuario</label>
+                <input type="text" id="username" class="input-campo" placeholder="Tu usuario" required>
+            </div>
+
+            <div class="campo-input">
+                <label class="nombre_label">Contraseña</label>
+                <input type="password" id="password" class="input-campo" placeholder="Tu contraseña" required>
+            </div>
+
+            <button type="submit" class="boton-enviar">Entrar</button>
+        </form>
+    </article>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('error-msg');
+
+            errorMsg.style.display = 'none';
+
+            try {
+                const response = await fetch('/api/login/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    window.location.href = '/?token=' + data.access;
+                } else {
+                    errorMsg.textContent = data.error || 'Credenciales incorrectas';
+                    errorMsg.style.display = 'block';
+                }
+
+            } catch (err) {
+                errorMsg.textContent = 'Error de conexión con el servidor';
+                errorMsg.style.display = 'block';
+            }
+        });
+    </script>
+
+</body>
+</html>

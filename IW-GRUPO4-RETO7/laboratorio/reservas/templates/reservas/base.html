@@ -6,11 +6,11 @@
     <meta charset="UTF-8">
     <title>{% block title %}Sistema de Reservas{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+    <script src="{% static 'js/auth.js' %}"></script>
 </head>
 
 <body class="cuerpo-principal">
 
-    <!-- HEADER -->
     <header class="header">
         <a href="{% url 'index' %}" class="link-logo">
             <h1 class="titulo-header">Sistema de Reservas</h1>
@@ -19,23 +19,20 @@
         <img src="{% static 'img/logo-deusto.jpg' %}" alt="Logo Deusto" class="logo-deusto">
 
         <section class="navegacion">
-            <a href="{% url 'index' %}" class="botones">Inicio</a>
-            <a href="{% url 'lista_usuarios' %}" class="botones">Usuarios</a>
-            <a href="{% url 'lista_recursos' %}" class="botones">Recursos</a>
-            <a href="{% url 'lista_reservas' %}" class="botones">Reservas</a>
+            <a href="{% url 'index' %}" class="botones" id="nav-inicio">Inicio</a>
+            <a href="{% url 'lista_usuarios' %}" class="botones" id="nav-usuarios">Usuarios</a>
+            <a href="{% url 'lista_recursos' %}" class="botones" id="nav-recursos">Recursos</a>
+            <a href="{% url 'lista_reservas' %}" class="botones" id="nav-reservas">Reservas</a>
+            <button onclick="logout()" class="botones">Cerrar sesión</button>
         </section>
     </header>
 
-
-    <!-- CONTENIDO PRINCIPAL -->
     <article class="contenido-principal">
         {% block content %}
         {% endblock %}
     </article>
 
-    <!-- FOOTER CON FORMULARIO -->
     <footer class="pie">
-
         <h3 class="mensaje-ayuda">¿Necesitas información sobre el laboratorio?</h3>
 
         <form class="form-contacto">
@@ -44,18 +41,15 @@
                     <label class="nombre_label">Nombre</label>
                     <input type="text" class="input-campo" placeholder="Tu nombre">
                 </div>
-
                 <div class="campo-input">
                     <label class="nombre_label">Email</label>
                     <input type="email" class="input-campo" placeholder="Tu email">
                 </div>
             </div>
-
             <div class="campo-descripcion">
                 <label class="nombre_label">Consulta</label>
                 <textarea class="textarea-proyecto" rows="4" placeholder="Escribe tu mensaje..."></textarea>
             </div>
-
             <button type="submit" class="boton-enviar">Enviar</button>
         </form>
 
@@ -63,9 +57,25 @@
             <p class="info-telefono">📞 Teléfono: +34 600 123 456</p>
             <p>📧 Email: soporte@laboratorio.com</p>
         </div>
-
     </footer>
 
-</body>
+    <script>
+        const token = verificarAuth();
 
+        document.addEventListener('DOMContentLoaded', function() {
+            const enlaces = document.querySelectorAll('a.botones');
+            enlaces.forEach(function(enlace) {
+                const href = enlace.getAttribute('href');
+                if (href && !href.startsWith('http') && !href.includes('token=')) {
+                    enlace.href = urlConToken(href);
+                }
+            });
+        });
+
+        function logout() {
+            window.location.href = '/login/';
+        }
+    </script>
+
+</body>
 </html>
