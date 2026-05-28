@@ -6,8 +6,10 @@
 
 <form method="post">
     {% csrf_token %}
+    <input type="hidden" name="token" value="{{ request.GET.token }}">
     {{ form.as_p }}
     <button type="submit">Guardar</button>
+    <a href="{% url 'lista_usuarios' %}?token={{ request.GET.token }}">Cancelar</a>
 </form>
 
 {% endblock %}

@@ -6,7 +6,7 @@
 
 <h1>Crear reserva</h1>
 
-<a href="{% url 'lista_reservas' %}" class="botones">⬅ Volver a la lista</a>
+<a href="{% url 'lista_reservas' %}?token={{ request.GET.token }}" class="botones">⬅ Volver a la lista</a>
 
 <hr>
 

@@ -6,12 +6,13 @@
 
 <h1>Editar recurso</h1>
 
-<a href="{% url 'lista_recursos' %}">⬅ Volver</a>
+<a href="{% url 'lista_recursos' %}?token={{ request.GET.token }}">⬅ Volver</a>
 
 <hr>
 
 <form method="post">
     {% csrf_token %}
+    <input type="hidden" name="token" value="{{ request.GET.token }}">
     {{ form.as_p }}
     <button type="submit">Guardar cambios</button>
 </form>

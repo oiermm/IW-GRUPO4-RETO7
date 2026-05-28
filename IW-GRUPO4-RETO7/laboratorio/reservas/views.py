@@ -40,22 +40,24 @@ def detalle_reserva(request, id):
 # ---------- CREAR ----------
 def crear_usuario(request):
     if request.method == 'POST':
+        token = request.POST.get('token')
         form = UsuarioForm(request.POST)
         if form.is_valid():
             form.save()
             logger.info(f"Usuario creado: {form.cleaned_data['nombre']}")
-            return redirect('lista_usuarios')
+            return redirect(f'/usuarios/?token={token}')
     else:
         form = UsuarioForm()
     return render(request, 'reservas/crear_usuario.html', {'form': form})
 
 def crear_recurso(request):
     if request.method == 'POST':
+        token = request.POST.get('token')
         form = RecursoForm(request.POST)
         if form.is_valid():
             form.save()
             logger.info(f"Recurso creado: {form.cleaned_data['nombre']}")
-            return redirect('lista_recursos')
+            return redirect(f'/recursos/?token={token}')
     else:
         form = RecursoForm()
     return render(request, 'reservas/crear_recurso.html', {'form': form})
@@ -67,10 +69,11 @@ def crear_reserva(request):
 def editar_usuario(request, id):
     usuario = get_object_or_404(Usuario, id=id)
     if request.method == 'POST':
+        token = request.GET.get('token') or request.POST.get('token')
         form = UsuarioForm(request.POST, instance=usuario)
         if form.is_valid():
             form.save()
-            return redirect('lista_usuarios')
+            return redirect(f'/usuarios/?token={token}')
     else:
         form = UsuarioForm(instance=usuario)
     return render(request, 'reservas/editar_usuario.html', {'form': form, 'usuario': usuario})
@@ -78,10 +81,11 @@ def editar_usuario(request, id):
 def editar_reserva(request, id):
     reserva = get_object_or_404(Reserva, id=id)
     if request.method == 'POST':
+        token = request.GET.get('token') or request.POST.get('token')
         form = ReservaForm(request.POST, instance=reserva)
         if form.is_valid():
             form.save()
-            return redirect('lista_reservas')
+            return redirect(f'/reservas/?token={token}')
     else:
         form = ReservaForm(instance=reserva)
     return render(request, 'reservas/editar_reserva.html', {'form': form})
@@ -89,10 +93,11 @@ def editar_reserva(request, id):
 def editar_recurso(request, id):
     recurso = get_object_or_404(Recurso, id=id)
     if request.method == 'POST':
+        token = request.GET.get('token') or request.POST.get('token')
         form = RecursoForm(request.POST, instance=recurso)
         if form.is_valid():
             form.save()
-            return redirect('lista_recursos')
+            return redirect(f'/recursos/?token={token}')
     else:
         form = RecursoForm(instance=recurso)
     return render(request, 'reservas/editar_recurso.html', {'form': form})
@@ -101,22 +106,25 @@ def editar_recurso(request, id):
 def eliminar_usuario(request, id):
     usuario = get_object_or_404(Usuario, id=id)
     if request.method == 'POST':
+        token = request.GET.get('token') or request.POST.get('token')
         usuario.delete()
-        return redirect('lista_usuarios')
+        return redirect(f'/usuarios/?token={token}')
     return render(request, 'reservas/eliminar_usuario.html', {'usuario': usuario})
 
 def eliminar_recurso(request, id):
     recurso = get_object_or_404(Recurso, id=id)
     if request.method == 'POST':
+        token = request.GET.get('token') or request.POST.get('token')
         recurso.delete()
-        return redirect('lista_recursos')
+        return redirect(f'/recursos/?token={token}')
     return render(request, 'reservas/eliminar_recurso.html', {'recurso': recurso})
 
 def eliminar_reserva(request, id):
     reserva = get_object_or_404(Reserva, id=id)
     if request.method == 'POST':
+        token = request.GET.get('token') or request.POST.get('token')
         reserva.delete()
-        return redirect('lista_reservas')
+        return redirect(f'/reservas/?token={token}')
     return render(request, 'reservas/eliminar_reserva.html', {'reserva': reserva})
 
 

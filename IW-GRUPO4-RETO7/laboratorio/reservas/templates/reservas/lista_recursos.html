@@ -6,7 +6,7 @@
 
 <h1>Recursos</h1>
 
-<a href="{% url 'crear_recurso' %}" class="botones">➕ Crear recurso</a>
+<a href="{% url 'crear_recurso' %}?token={{ request.GET.token }}" class="botones">➕ Crear recurso</a>
 
 <hr>
 
@@ -23,8 +23,8 @@
 
                 <br><br>
 
-                <a href="{% url 'editar_recurso' r.id %}">✏️ Editar</a> |
-                <a href="{% url 'eliminar_recurso' r.id %}">🗑️ Eliminar</a>
+                <a href="{% url 'editar_recurso' r.id %}?token={{ request.GET.token }}">✏️ Editar</a> |
+                <a href="{% url 'eliminar_recurso' r.id %}?token={{ request.GET.token }}">🗑️ Eliminar</a>
 
             </li>
             <hr>
