@@ -13,8 +13,9 @@
 
 <form method="post">
     {% csrf_token %}
+    <input type="hidden" name="token" value="{{ request.GET.token }}">
     <button type="submit">Sí, eliminar</button>
-    <a href="{% url 'lista_recursos' %}">Cancelar</a>
+    <a href="{% url 'lista_recursos' %}?token={{ request.GET.token }}">Cancelar</a>
 </form>
 
 {% endblock %}

@@ -64,4 +64,8 @@ class Reserva(models.Model):
 )
 
     def __str__(self):
-        return f"Reserva {self.codigo_reserva} - {self.recurso.nombre}"
+        recursos_nombres = ", ".join(
+            [recurso.nombre for recurso in self.recursos.all()]
+        )
+
+        return f"Reserva {self.codigo_reserva} - {recursos_nombres}"

@@ -6,16 +6,229 @@
 
 <h1>Crear reserva</h1>
 
-<a href="{% url 'lista_reservas' %}" class="botones">⬅ Volver a la lista</a>
+<a href="{% url 'lista_reservas' %}?token={{ request.GET.token }}" class="botones">⬅ Volver a la lista</a>
 
 <hr>
 
-<form method="post">
+<div id="error-form" style="color:red; display:none; margin-bottom: 1rem;"></div>
+<div id="exito-form" style="color:green; display:none; margin-bottom: 1rem;"></div>
+
+<form id="form-reserva">
     {% csrf_token %}
 
-    {{ form.as_p }}
+    <div class="campo-input">
+        <label class="nombre_label">Código de reserva</label>
+        <input type="text" id="codigo_reserva" class="input-campo" placeholder="Ej: RES-001" required>
+    </div>
+
+    <div class="campo-input">
+        <label class="nombre_label">Fecha</label>
+        <input type="date" id="fecha" class="input-campo" required>
+    </div>
+
+    <div class="campo-input">
+        <label class="nombre_label">Hora de inicio</label>
+        <input type="time" id="hora_inicio" class="input-campo" required>
+    </div>
+
+    <div class="campo-input">
+        <label class="nombre_label">Hora de fin</label>
+        <input type="time" id="hora_fin" class="input-campo" required>
+    </div>
+
+    <div class="campo-input">
+        <label class="nombre_label">Duración calculada</label>
+        <input type="text" id="duracion" class="input-campo" readonly placeholder="Se calcula automáticamente">
+    </div>
+
+    <div class="campo-input">
+        <label class="nombre_label">Finalidad</label>
+        <textarea id="finalidad" class="input-campo" rows="3" required></textarea>
+    </div>
+
+    <div class="campo-input">
+        <label class="nombre_label">Estado</label>
+        <select id="estado" class="input-campo">
+            <option value="pendiente">Pendiente</option>
+            <option value="confirmada">Confirmada</option>
+            <option value="cancelada">Cancelada</option>
+        </select>
+    </div>
+
+    <div class="campo-input">
+        <label class="nombre_label">Usuario</label>
+        <select id="usuario" class="input-campo" required>
+            <option value="">Cargando usuarios...</option>
+        </select>
+    </div>
+
+    <div class="campo-input">
+        <label class="nombre_label">Recursos (puedes seleccionar varios)</label>
+        <select id="recursos_ids" class="input-campo" multiple required>
+            <option value="">Cargando recursos...</option>
+        </select>
+        <small>Mantén Ctrl para seleccionar varios</small>
+    </div>
 
     <button type="submit" class="boton-enviar">Guardar reserva</button>
 </form>
+
+<script>
+    const tokenActual = getToken();
+
+    async function cargarUsuarios() {
+        try {
+            const response = await fetch('/api/usuarios/', {
+                headers: { 'Authorization': 'Bearer ' + tokenActual }
+            });
+            const data = await response.json();
+            const select = document.getElementById('usuario');
+            select.innerHTML = '<option value="">Selecciona un usuario</option>';
+            data.forEach(function(u) {
+                const option = document.createElement('option');
+                option.value = u.id;
+                option.textContent = u.nombre + ' ' + u.apellidos + ' (' + u.dni + ')';
+                select.appendChild(option);
+            });
+        } catch (err) {
+            console.log('Error cargando usuarios:', err);
+        }
+    }
+
+    async function cargarRecursos() {
+        try {
+            const response = await fetch('/api/recursos/', {
+                headers: { 'Authorization': 'Bearer ' + tokenActual }
+            });
+            const data = await response.json();
+            const select = document.getElementById('recursos_ids');
+            select.innerHTML = '';
+            data.forEach(function(r) {
+                const option = document.createElement('option');
+                option.value = r.id;
+                option.textContent = r.nombre + ' (' + r.codigo + ') - ' + r.tipo;
+                select.appendChild(option);
+            });
+        } catch (err) {
+            console.log('Error cargando recursos:', err);
+        }
+    }
+
+    cargarUsuarios();
+    cargarRecursos();
+
+    function calcularDuracion() {
+        const inicio = document.getElementById('hora_inicio').value;
+        const fin = document.getElementById('hora_fin').value;
+        if (!inicio || !fin) return;
+
+        const partes1 = inicio.split(':');
+        const partes2 = fin.split(':');
+        const totalMin = (parseInt(partes2[0]) * 60 + parseInt(partes2[1])) -
+                         (parseInt(partes1[0]) * 60 + parseInt(partes1[1]));
+
+        if (totalMin <= 0) {
+            document.getElementById('duracion').value = '⚠️ Hora fin debe ser posterior';
+        } else {
+            const horas = Math.floor(totalMin / 60);
+            const mins = totalMin % 60;
+            document.getElementById('duracion').value = horas + 'h ' + mins + 'min';
+        }
+    }
+
+    document.getElementById('hora_inicio').addEventListener('change', calcularDuracion);
+    document.getElementById('hora_fin').addEventListener('change', calcularDuracion);
+
+    function validarFormulario() {
+        const codigo = document.getElementById('codigo_reserva').value;
+        const inicio = document.getElementById('hora_inicio').value;
+        const fin = document.getElementById('hora_fin').value;
+        const usuario = document.getElementById('usuario').value;
+        const recursos = document.getElementById('recursos_ids').selectedOptions;
+
+        const regexCodigo = /^[A-Z]{2,5}-\d{3,}$/;
+        if (!regexCodigo.test(codigo)) {
+            mostrarError('El código debe tener formato RES-001 (letras mayúsculas, guion, números)');
+            return false;
+        }
+
+        if (inicio && fin && fin <= inicio) {
+            mostrarError('La hora de fin debe ser posterior a la hora de inicio');
+            return false;
+        }
+
+        if (!usuario) {
+            mostrarError('Debes seleccionar un usuario');
+            return false;
+        }
+
+        if (recursos.length === 0) {
+            mostrarError('Debes seleccionar al menos un recurso');
+            return false;
+        }
+
+        return true;
+    }
+
+    function mostrarError(msg) {
+        const box = document.getElementById('error-form');
+        box.textContent = msg;
+        box.style.display = 'block';
+    }
+
+    document.getElementById('form-reserva').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        document.getElementById('error-form').style.display = 'none';
+        document.getElementById('exito-form').style.display = 'none';
+
+        if (!validarFormulario()) return;
+
+        const recursosSelect = document.getElementById('recursos_ids').selectedOptions;
+        const recursos_ids = Array.from(recursosSelect).map(function(opt) {
+            return parseInt(opt.value);
+        });
+
+        const body = {
+            codigo_reserva: document.getElementById('codigo_reserva').value,
+            fecha: document.getElementById('fecha').value,
+            hora_inicio: document.getElementById('hora_inicio').value,
+            hora_fin: document.getElementById('hora_fin').value,
+            finalidad: document.getElementById('finalidad').value,
+            estado: document.getElementById('estado').value,
+            usuario_id: parseInt(document.getElementById('usuario').value),
+            recursos_ids: recursos_ids,
+        };
+
+        try {
+            const response = await fetch('/api/reservas/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + tokenActual,
+                },
+                body: JSON.stringify(body)
+            });
+
+            if (response.ok) {
+                const exito = document.getElementById('exito-form');
+                exito.textContent = 'Reserva creada correctamente';
+                exito.style.display = 'block';
+                setTimeout(function() {
+                    window.location.href = urlConToken('/reservas/');
+                }, 1500);
+            } else {
+                const err = await response.json();
+                if (err.error) {
+                    mostrarError(err.error);
+                } else {
+                    mostrarError('Error: ' + JSON.stringify(err));
+                }
+            }
+        } catch (err) {
+            mostrarError('Error de conexión con el servidor');
+        }
+    });
+</script>
 
 {% endblock %}

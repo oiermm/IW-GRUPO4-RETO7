@@ -13,6 +13,7 @@
 
 <form method="post">
     {% csrf_token %}
+    <input type="hidden" name="token" value="{{ request.GET.token }}">
     <button type="submit">Sí, eliminar</button>
     <a href="{% url 'lista_usuarios' %}">Cancelar</a>
 </form>

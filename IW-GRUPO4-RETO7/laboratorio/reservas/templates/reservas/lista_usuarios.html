@@ -6,7 +6,7 @@
 
 <h1>Usuarios</h1>
 
-<a href="{% url 'crear_usuario' %}" class="botones">➕ Crear usuario</a>
+<a href="{% url 'crear_usuario' %}?token={{ request.GET.token }}" class="botones">➕ Crear usuario</a>
 
 <hr>
 
@@ -19,8 +19,8 @@
 
         <br><br>
 
-        <a href="{% url 'editar_usuario' u.id %}">✏️ Editar</a> 
-        <a href="{% url 'eliminar_usuario' u.id %}">🗑️ Eliminar</a>
+        <a href="{% url 'editar_usuario' u.id %}?token={{ request.GET.token }}">✏️ Editar</a> 
+        <a href="{% url 'eliminar_usuario' u.id %}?token={{ request.GET.token }}">🗑️ Eliminar</a>
 
     </li>
     <hr>

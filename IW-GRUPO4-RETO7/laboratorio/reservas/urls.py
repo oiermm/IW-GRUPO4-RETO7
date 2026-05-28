@@ -22,4 +22,13 @@ urlpatterns = [
     path('usuarios/<int:id>/eliminar/', views.eliminar_usuario, name='eliminar_usuario'),
     path('recursos/<int:id>/eliminar/', views.eliminar_recurso, name='eliminar_recurso'),
     path('reservas/<int:id>/eliminar/', views.eliminar_reserva, name='eliminar_reserva'),
+    
+    
+    path('login/', views.login_view, name='login'),
+    path('api/me/', views.MiPerfilAPIView.as_view(), name='api_me'),
+    path('api/login/', views.LoginAPIView.as_view(), name='api_login'),
+    path('api/reservas/', views.ReservaAPIView.as_view(), name='api_reservas'),
+    path('api/reservas/<int:id>/', views.ReservaDetalleAPIView.as_view(), name='api_reserva_detalle'),
+    path('api/recursos/', views.RecursoAPIView.as_view(), name='api_recursos'),
+    path('api/usuarios/', views.UsuarioAPIView.as_view(), name='api_usuarios'),
 ]
